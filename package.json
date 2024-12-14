@@ -1,0 +1,21 @@
+{
+  "name": "neuro-game-sdk-ollama-server",
+  "version": "0.0.1",
+  "description": "Uses Ollama API to interact with neuro-game-sdk.",
+  "main": "src/index.ts",
+  "scripts": {
+    "serve": "npx tsx src/index.ts"
+  },
+  "author": "milesboopi",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "ollama": "^0.5.11",
+    "ws": "^8.18.0"
+  }
+}
