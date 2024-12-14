@@ -12,5 +12,5 @@
 
 **'actions/result'**: The result of an action is assigned to the action results map.
 
-The LLM is prompted periodically. `periodicTimeoutTime` in the config controls how long between each prompts. The periodic prompt asks the LLM to do an action, if there are no actions the prompting or if it is already responding to a prompt it is skipped.
+The LLM is prompted periodically. `periodicTimeoutTime` in the config controls how long between each prompts. The periodic prompt asks the LLM to do an action, if there are no actions or if it is already responding to a prompt it is skipped.
 
