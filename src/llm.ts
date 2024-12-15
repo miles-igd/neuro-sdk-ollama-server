@@ -39,6 +39,12 @@ export class LargeLanguageModelHandler extends EventEmitter {
 
   constructor(server: Server, opts: LLMOptions) {
     super();
+    ollama.list().then((response) => {
+      const index = response.models.find((model) => model.name === opts.model);
+      if (!index) {
+        throw new Error(`Model ${opts.model} not found. These are the available models: ${JSON.stringify(response.models, null, 2)}`);
+      }
+    });
     this.model = opts.model;
     this.ollamaOptions = opts.ollamaOptions || {};
     this.periodicTimeoutTime = opts.periodicTimeoutTime;

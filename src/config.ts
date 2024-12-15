@@ -19,7 +19,7 @@ export interface AppConfig {
 
 export const config: AppConfig = {
   llmOptions: {
-    model: 'llama3.2',
+    model: 'llama3.2:latest',
     contextLength: 8192,
     periodicTimeoutTime: 1000 * 30, // 30 seconds
     ollamaOptions: {
