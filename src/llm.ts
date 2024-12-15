@@ -14,7 +14,7 @@ import {
 } from './sdk_types';
 import ollama, { ChatRequest, ChatResponse, Message, Options } from 'ollama';
 import EventEmitter from 'events';
-import { type } from 'os';
+import util from 'util';
 
 interface ActionChoiceResponse {
   message: string;
@@ -69,11 +69,7 @@ export class LargeLanguageModelHandler extends EventEmitter {
     try {
       this.responding = true;
       console.log(
-        `Ollama request with last message: ${JSON.stringify(
-          messages.slice(-1),
-          null,
-          2,
-        )}`,
+        `-Ollama-> ${util.inspect(messages.at(-1), false, null, true)}`,
       );
 
       const response = await ollama.chat({
@@ -84,7 +80,7 @@ export class LargeLanguageModelHandler extends EventEmitter {
       });
 
       console.log(
-        `Ollama response: ${JSON.stringify(response.message, null, 2)}`,
+        `<-Ollama- ${util.inspect(response.message, false, null, true)}`,
       );
       return response;
     } finally {
@@ -287,14 +283,12 @@ export class LargeLanguageModelHandler extends EventEmitter {
   }
 
   private handleActionsRegister(data: C2SMessageActionsRegister) {
-    console.log(`Registering actions: ${JSON.stringify(data)}`);
     for (const action of data.data.actions) {
       this.actions.set(action.name, action);
     }
   }
 
   private handleActionsUnregister(data: C2SMessageActionsUnregister) {
-    console.log(`Unregistering actions: ${JSON.stringify(data)}`);
     for (const actionName of data.data.action_names) {
       this.actions.delete(actionName);
     }

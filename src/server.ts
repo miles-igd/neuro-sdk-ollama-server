@@ -3,6 +3,7 @@ import { LargeLanguageModelHandler } from './llm';
 import { WebSocketServer } from 'ws';
 import { AppConfig } from './config';
 import { C2SMessage, S2CMessage } from './sdk_types';
+import util from 'util';
 
 export class Server extends EventEmitter {
   private wss: WebSocketServer;
@@ -37,6 +38,8 @@ export class Server extends EventEmitter {
   }
 
   private broadcast(message: S2CMessage) {
+    console.log(`--S2C--> ${util.inspect(message, false, null, true)}`);
+
     for (const connection of this.wss.clients) {
       connection.send(JSON.stringify(message));
     }
@@ -44,10 +47,9 @@ export class Server extends EventEmitter {
 
   private handleMessage(message: BinaryData) {
     try {
-      const messageString = message.toString();
-      console.log(`Received: ${messageString}`);
-      const data = JSON.parse(messageString) as C2SMessage;
-      this.emit(data.command, data);
+      const c2sMessage = JSON.parse(message.toString()) as C2SMessage;
+      console.log(`<--C2S-- ${util.inspect(c2sMessage, false, null, true)}`);
+      this.emit(c2sMessage.command, c2sMessage);
     } catch (error) {
       // JSON Errors are ignored by the Server. It's the Client's responsibility to send valid JSON.
       console.error(error);
