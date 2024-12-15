@@ -21,7 +21,7 @@ export const config: AppConfig = {
   llmOptions: {
     model: 'llama3.2:latest',
     contextLength: 8192,
-    periodicTimeoutTime: 1000 * 30, // 30 seconds
+    periodicTimeoutTime: 1000 * 10, // 10 seconds
     ollamaOptions: {
       temperature: 0.85,
       num_ctx: 8192,

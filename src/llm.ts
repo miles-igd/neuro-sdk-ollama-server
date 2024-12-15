@@ -63,7 +63,7 @@ export class LargeLanguageModelHandler extends EventEmitter {
   private initializePeriodicResponse() {
     if (this.periodicTimeoutTime) {
       this.periodicTimeout = setTimeout(() => {
-        this.periodicResponse();
+        this.periodicPrompting();
       }, this.periodicTimeoutTime);
     }
   }
@@ -105,6 +105,13 @@ export class LargeLanguageModelHandler extends EventEmitter {
     }
   }
 
+  private async periodicPrompting(): Promise<void> {
+    const periodicResponse = await this.periodicResponse();
+    if (periodicResponse) {
+      await this.doAction(periodicResponse.action);
+    }
+  }
+
   private async periodicResponse(): Promise<ActionChoiceResponse | null> {
     // Periodic response requests are skipped if it is already responding, unlike action response requests which are queued.
     if (this.responding || this.hasForcedResponse || this.actions.size === 0) {
@@ -140,7 +147,7 @@ export class LargeLanguageModelHandler extends EventEmitter {
 
       if (this.periodicTimeoutTime) {
         this.periodicTimeout = setTimeout(
-          () => this.periodicResponse(),
+          () => this.periodicPrompting(),
           this.periodicTimeoutTime,
         );
       }
