@@ -165,13 +165,18 @@ export class LargeLanguageModelHandler extends EventEmitter {
     ephemeralContext: boolean,
     actionNames: string[],
   ) {
+    const actionSchemas = Array.from(this.actions.values()).map((action) => ({
+      name: action.name,
+      description: action.description,
+      schema: action.schema,
+    }));
     const forcePrompt = {
       role: 'user',
       content: `${
         state ? `The current state of the game is: ${state}. ` : ''
       }${query} Respond with a message describing what you want to do and the name of the action you want to take. Choose one of the following actions: ${JSON.stringify(
         actionNames,
-      )}. Respond in JSON.`,
+      )}. Descriptions and schemas of actions are: ${JSON.stringify(actionSchemas)}. Respond in JSON.`,
     };
 
     // Use a copy instead if ephemeral, so that we don't modify the original. Using the copy means state and query is not "remembered".
